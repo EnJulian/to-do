@@ -16,13 +16,13 @@ Request Body:
 Endpoint: POST /api/login
 Description: Authenticate a user and provide a token.
 Request Body:
-
+```
 {
   "username": "string",
   "password": "string"
 }
-
-
+```
+```
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -43,7 +43,7 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export default authenticateJWT;
-
+```
 
 ## Task Management
 4. Create a Task
@@ -51,14 +51,14 @@ Endpoint: POST /api/tasks
 Description: Create a new task.
 Request Body:
 
-
+```
 {
   "task": "string",
   "priority": "number"
 }
+```
 
-
-Authorization: Bearer <token>
+```Authorization: Bearer <token>```
 
 
 5. Get All Tasks
@@ -71,8 +71,7 @@ completed: Optional, filter tasks by completion status.
 Headers:
 
 makefile
-Copy code
-Authorization: Bearer <token>
+``` Authorization: Bearer <token>```
 
 
 
@@ -175,7 +174,6 @@ We will need two main tables: users and tasks.
 
 users table
 sql
-Copy code
 ```
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
@@ -185,7 +183,7 @@ CREATE TABLE users (
 ```
 tasks table
 sql
-Copy code
+```
 CREATE TABLE tasks (
   id SERIAL PRIMARY KEY,
   task VARCHAR(255) NOT NULL,
@@ -193,11 +191,12 @@ CREATE TABLE tasks (
   completed BOOLEAN DEFAULT FALSE,
   user_id INT REFERENCES users(id) ON DELETE CASCADE
 );
+```
 Authentication Middleware
 Create a middleware to protect the routes and validate the JWT token:
 
 typescript
-Copy code
+```
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -216,25 +215,27 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     next();
   });
 };
-
 export default authMiddleware;
+```
 ## Express Routes
 Here is an example of how to set up the routes using Express:
 
 typescript
-Copy code
+```
 import express from 'express';
 import authMiddleware from './middleware/authMiddleware';
 import { createTask, getTasks, editTask, deleteTask, toggleTaskCompletion } from './controllers/taskController';
 import { register, login } from './controllers/authController';
 
 const router = express.Router();
-
+```
 ## Authentication Routes
+```
 router.post('/auth/register', register);
 router.post('/auth/login', login);
-
+```
 ## Task Routes
+```
 router.post('/tasks', authMiddleware, createTask);
 router.get('/tasks', authMiddleware, getTasks);
 router.put('/tasks/:id', authMiddleware, editTask);
@@ -242,6 +243,7 @@ router.delete('/tasks/:id', authMiddleware, deleteTask);
 router.patch('/tasks/:id/toggle', authMiddleware, toggleTaskCompletion);
 
 export default router;
+```
 This setup provides a comprehensive set of endpoints and basic security with JWT authentication, allowing users to manage their TODO tasks effectively. You can expand upon this foundation to include additional features or further refine the existing ones.
 
 
